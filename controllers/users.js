@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const User = require("../model/user");
 const jwt = require("jsonwebtoken");
 
+
 const SALT_LENGTH = 12;
 
 router.post("/signup", async (req, res) => {
