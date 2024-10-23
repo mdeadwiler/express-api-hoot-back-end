@@ -59,6 +59,9 @@ router.put('/:hootId', async (req, res) => {
   try {
     // Find the hoot:
     const hoot = await Hoot.findById(req.params.hootId);
+    if (!hoot) {
+      return res.status(404).send("Hoot not found.");
+    }
 
     // Check permissions:
     if (!hoot.author.equals(req.user._id)) {
@@ -71,6 +74,22 @@ router.put('/:hootId', async (req, res) => {
       req.body,
       { new: true }
     );
+
+    if (!updatedHoot) {
+      return res.status(404).send("Hoot update failed.");
+    }
+
+    // Append req.user to the author property:
+    updatedHoot.author = req.user;
+
+    // Issue JSON response:
+    res.status(200).json(updatedHoot);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
 
     // Append req.user to the author property:
     updatedHoot._doc.author = req.user;
