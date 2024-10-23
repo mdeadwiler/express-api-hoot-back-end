@@ -68,7 +68,7 @@ router.delete('/:hootId', async (req, res) => {
        res.status(500).json(error); 
     }
 });
-
+  
 //Protected Routes
 router.use(verifyToken);
 router.post('/', async (req, res) => {});
