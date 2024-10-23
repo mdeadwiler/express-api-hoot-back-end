@@ -17,14 +17,14 @@ router.post("/signup", async (req, res) => {
       username: req.body.username,
       hashedPassword: bcrypt.hashSync(req.body.password, SALT_LENGTH),
     });
-    const token = jwt.sign(
+    const token = jwt.sign( // did not mention token at res.status(201) section
       {
         username: user.username,
         _id: user._id,
       },
       process.env.JWT_SECRET
     );
-    res.status(201).json({ user });
+    res.status(201).json({ user, token });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
