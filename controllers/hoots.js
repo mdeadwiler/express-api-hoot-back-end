@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 //we have to declare Hoot model 
-// const Hoot = require('../models/hoot.js');
+ const Hoot = require('../models/hoot.js');
 
 // controllers/hoots.js
 
