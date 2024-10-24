@@ -1,20 +1,23 @@
 // controllers/hoots.js
 const express = require('express');
 const verifyToken = require('../middleware/verify-token.js');
-const Hoot = require('../model/hoot.js');
+const Hoot = require('../models/hoot.js');
 const router = express.Router();
 
-//Public Routes
-router.post('/', async (res, req) => {
-try {
+//Protected Routes
+router.use(verifyToken);
+
+//Routes
+router.post('/', async (req, res) => {
+  try {
     req.body.author = req.user._id;
-    const hoot = await Hoot.Create(req.body);
+    const hoot = await Hoot.create(req.body);
     hoot._doc.author = req.user;
-    res.statusCode(201).json(hoot);
-} catch (error) {
-   console.log(error);
-   res.statusCode(5001).json(error); 
-}
+    res.status(201).json(hoot);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(error);
+  }
 });
 
 router.get('/', async (req, res) => {
@@ -90,15 +93,6 @@ router.put('/:hootId', async (req, res) => {
   }
 });
 
-
-    // Append req.user to the author property:
-    updatedHoot._doc.author = req.user;
-
-    // Issue JSON response:
-    res.status(200).json(updatedHoot);
-
-
-
 router.delete('/:hootId', async (req, res) => {
     try {
       const hoot = await Hoot.findById(req.params.hootId);
@@ -113,11 +107,5 @@ router.delete('/:hootId', async (req, res) => {
        res.status(500).json(error); 
     }
 });
-  
-//Protected Routes
-router.use(verifyToken);
-router.post('/', async (req, res) => {});
 
 module.exports = router;
-
-
